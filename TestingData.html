@@ -2,41 +2,109 @@
 <html>
 <head>
     <title>Excel Data Loader</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td, th {
+            padding: 6px 10px;
+            border: 1px solid #444;
+        }
+    </style>
 </head>
 <body>
 
 <h2>Google Sheet Data</h2>
 <button onclick="loadData()">🔄 Refresh Data</button>
 
-<table border="1" id="dataTable"></table>
+<table id="dataTable"></table>
 
 <script>
-const sheetURL = "https://docs.google.com/spreadsheets/d/1s1XHXFJe0_o2fp7ysxb0AFcoqmkna2C8rO_kcuyeolQ/edit?usp=sharing";
+const sheetURL =
+    "https://docs.google.com/spreadsheets/d/1s1XHXFJe0_o2fp7ysxb0AFcoqmkna2C8rO_kcuyeolQ/gviz/tq?tqx=out:csv";
 
 async function loadData() {
-    const response = await fetch(sheetURL);
-    const text = await response.text();
-    
-    const rows = text.split("\n").map(row => row.split(","));
-    const table = document.getElementById("dataTable");
-    table.innerHTML = "";
+    console.clear();
+    console.log("🔄 Loading Google Sheet data...");
+    console.log("📄 Sheet URL:", sheetURL);
 
-    rows.forEach(row => {
-        const tr = document.createElement("tr");
-        row.forEach(cell => {
-            const td = document.createElement("td");
-            td.textContent = cell;
-            tr.appendChild(td);
+    try {
+        const response = await fetch(sheetURL);
+
+        console.log("📡 Fetch response:", response);
+
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const text = await response.text();
+        console.log("📜 Raw CSV data:\n", text);
+
+        const rows = parseCSV(text);
+        console.log("📊 Parsed rows:", rows);
+
+        const table = document.getElementById("dataTable");
+        table.innerHTML = "";
+
+        rows.forEach((row, rowIndex) => {
+            const tr = document.createElement("tr");
+
+            row.forEach(cell => {
+                const td = document.createElement(rowIndex === 0 ? "th" : "td");
+                td.textContent = cell;
+                tr.appendChild(td);
+            });
+
+            table.appendChild(tr);
         });
-        table.appendChild(tr);
-    });
+
+        console.log("✅ Table rendered successfully");
+
+    } catch (error) {
+        console.error("❌ Failed to load sheet:", error);
+        alert("Error loading data. Check console logs.");
+    }
 }
 
-// Load automatically on page load
+/* Proper CSV parser (handles quoted commas) */
+function parseCSV(csvText) {
+    const rows = [];
+    let currentRow = [];
+    let currentCell = "";
+    let insideQuotes = false;
+
+    for (let i = 0; i < csvText.length; i++) {
+        const char = csvText[i];
+
+        if (char === '"' && csvText[i + 1] === '"') {
+            currentCell += '"';
+            i++;
+        } else if (char === '"') {
+            insideQuotes = !insideQuotes;
+        } else if (char === "," && !insideQuotes) {
+            currentRow.push(currentCell.trim());
+            currentCell = "";
+        } else if (char === "\n" && !insideQuotes) {
+            currentRow.push(currentCell.trim());
+            rows.push(currentRow);
+            currentRow = [];
+            currentCell = "";
+        } else {
+            currentCell += char;
+        }
+    }
+
+    if (currentCell) {
+        currentRow.push(currentCell.trim());
+        rows.push(currentRow);
+    }
+
+    return rows;
+}
+
+// Auto-load on page open
 window.onload = loadData;
 </script>
 
 </body>
 </html>
-
-
