@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Chris Mom & Child Leaderboard</title>
+<title>ChrisMax Leaderboard</title>
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
@@ -14,89 +14,37 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 /* ===== BASE ===== */
-body{
-    min-height:100vh;
-    background:#070b12;
-    font-family:'Poppins',sans-serif;
-    color:#fff;
-    overflow:hidden;
-}
-
-/* ===== CYBER GRID ===== */
-.grid{
-    position:fixed;
-    inset:0;
-    background:
-      linear-gradient(rgba(255,42,42,.25) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,42,42,.25) 1px, transparent 1px);
-    background-size:40px 40px;
-    transform-origin:center;
-    transform:perspective(800px) rotateX(60deg);
-    animation:gridMove 20s linear infinite;
-    opacity:.25;
-    z-index:0;
-}
-@keyframes gridMove{
-    from{background-position:0 0,0 0}
-    to{background-position:0 800px,800px 0}
-}
-
-/* ===== NEON WAVE ===== */
-.wave{
-    position:fixed;
-    bottom:0;
-    width:100%;
-    height:40%;
-    z-index:0;
-    opacity:.7;
-}
-.wave svg{
-    width:100%;
+html, body{
     height:100%;
-}
-.wave path{
-    fill:none;
-    stroke:#ff2a2a;
-    stroke-width:3;
-    filter:drop-shadow(0 0 20px #ff2a2a);
-    animation:waveMove 6s ease-in-out infinite;
-}
-@keyframes waveMove{
-    50%{transform:translateX(-40px)}
+    width:100%;
+    overflow:hidden;
+    font-family:'Poppins',sans-serif;
+    background:#070b12;
+    color:#fff;
+    position:relative;
 }
 
-/* ===== PARTICLES ===== */
+/* ===== BACKGROUND PARTICLES ===== */
 .particle{
     position:fixed;
     top:-10px;
     pointer-events:none;
     animation:fall linear infinite;
     opacity:.8;
-    z-index:1;
+    z-index:0;
+    font-size:14px;
 }
 @keyframes fall{
     to{transform:translateY(110vh)}
 }
 
-/* ===== LAYOUT ===== */
+/* ===== CONTAINER ===== */
 .container{
     max-width:1050px;
-    margin:70px auto;
-    padding:30px;
+    margin:40px auto;
+    padding:20px;
     position:relative;
     z-index:3;
-}
-
-/* ===== CARD ===== */
-.card{
-    background:rgba(255,255,255,0.06);
-    backdrop-filter:blur(18px);
-    border-radius:26px;
-    padding:34px;
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow:
-      0 0 80px rgba(255,42,42,.25),
-      inset 0 0 40px rgba(255,42,42,.1);
 }
 
 /* ===== HEADER ===== */
@@ -104,178 +52,184 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:28px;
-    padding-bottom:20px;
-    border-bottom:1px solid rgba(255,255,255,.15);
-    position:relative;
+    margin-bottom:20px;
 }
-.header::after{
-    content:"";
-    position:absolute;
-    bottom:-1px;
-    left:0;
-    width:160px;
-    height:3px;
-    background:linear-gradient(90deg,#ff2a2a,transparent);
-    animation:sweep 3s infinite;
-}
-@keyframes sweep{
-    0%{width:40px;opacity:.3}
-    50%{width:160px;opacity:1}
-    100%{width:40px;opacity:.3}
-}
-
-/* ===== TITLE ===== */
-.title{
+.header .title{
     display:flex;
-    gap:16px;
+    gap:12px;
     align-items:center;
 }
-.title i{
-    font-size:40px;
+.header .title i{
+    font-size:38px;
     color:#ff2a2a;
-    text-shadow:0 0 30px rgba(255,42,42,.9);
-    animation:pulse 2.2s infinite;
+    text-shadow:0 0 30px rgba(255,42,42,0.8);
+    animation:pulse 2s infinite;
 }
 @keyframes pulse{50%{transform:scale(1.15)}}
-
-.title h1{
+.header .title h1{
     font-family:'Space Grotesk',sans-serif;
-    font-size:32px;
+    font-size:30px;
 }
-.title span{
+.header .title span{
     font-size:12px;
-    opacity:.7;
+    opacity:0.7;
     letter-spacing:1px;
     text-transform:uppercase;
 }
 
-/* ===== REFRESH ===== */
+/* ===== REFRESH BUTTON ===== */
 .refresh{
     background:linear-gradient(135deg,#ff2a2a,#ff6a6a);
     border:none;
-    padding:15px 30px;
+    padding:12px 25px;
     border-radius:40px;
-    font-weight:800;
+    font-weight:700;
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:10px;
     cursor:pointer;
-    box-shadow:0 0 40px rgba(255,42,42,.9);
+    box-shadow:0 0 25px rgba(255,42,42,.7);
     transition:.3s;
+    z-index:3;
 }
-.refresh:hover{transform:scale(1.12)}
+.refresh:hover{transform:scale(1.1)}
 .refresh.spin i{animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== TABLE CARD ===== */
+.card{
+    background:linear-gradient(135deg, rgba(255,42,42,.1), rgba(0,0,0,.5));
+    backdrop-filter:blur(12px);
+    border-radius:26px;
+    padding:20px;
+    box-shadow:0 0 50px rgba(255,42,42,.5);
+    border:1px solid rgba(255,42,42,.2);
+}
 
 /* ===== TABLE ===== */
 table{
     width:100%;
     border-collapse:separate;
-    border-spacing:0 16px;
+    border-spacing:0 14px;
 }
 th{
-    font-size:13px;
+    font-size:14px;
     opacity:.7;
     text-align:left;
-    padding:12px 20px;
+    padding:10px 20px;
 }
 td{
-    padding:20px;
+    padding:15px 20px;
+    font-size:15px;
 }
 
 /* ===== ROWS ===== */
 .row{
-    background:rgba(255,255,255,.06);
-    border-radius:18px;
+    background:rgba(255,255,255,.05);
+    border-radius:16px;
     transition:.35s;
+    position:relative;
 }
 .row:hover{
-    transform:translateY(-3px) scale(1.02);
-    box-shadow:0 0 40px rgba(255,42,42,.5);
+    transform:translateY(-2px) scale(1.01);
+    box-shadow:0 0 25px rgba(255,42,42,.5);
 }
 
-/* ===== RANK ===== */
-.rank{
-    font-weight:900;
-    font-size:18px;
-}
-.rank i{color:#ff2a2a;margin-right:8px}
-
-/* ===== FIRST ===== */
+/* ===== FIRST PLACE ===== */
 .first{
     background:linear-gradient(135deg,rgba(255,42,42,.5),rgba(255,255,255,.08));
     box-shadow:0 0 60px rgba(255,42,42,1);
 }
+.first::after{
+    content:"🎁";
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    font-size:28px;
+    animation:float 2s infinite;
+}
+@keyframes float{50%{transform:translateY(-6px)}}
 
-/* ===== SCORE ===== */
-.score{
+/* ===== RANK ===== */
+.rank{
     font-weight:800;
+    font-size:18px;
+}
+.rank i{margin-right:6px; color:#ff2a2a;}
+
+/* ===== POINTS ===== */
+.points{
+    font-weight:700;
     color:#ff4d4d;
-    text-shadow:0 0 15px rgba(255,42,42,.7);
+    text-shadow:0 0 10px rgba(255,42,42,.6);
+}
+
+/* ===== FESTIVE ICONS ===== */
+.festive-icon{
+    margin-left:6px;
+    animation:icon-bounce 2s infinite alternate;
+}
+@keyframes icon-bounce{
+    50%{transform:translateY(-4px);}
+}
+
+/* ===== PULSE ===== */
+@keyframes pulse{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.15);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- Cyber Grid -->
-<div class="grid"></div>
-
-<!-- Neon Wave -->
-<div class="wave">
-<svg viewBox="0 0 1440 320" preserveAspectRatio="none">
-  <path d="M0,160 C240,220 480,100 720,140 960,180 1200,80 1440,120"/>
-</svg>
-</div>
-
-<div class="container">
-<div class="card">
-
-    <div class="header">
-        <div class="title">
-            <i class="fas fa-fire"></i>
-            <div>
-                <h1>Leaderboard</h1>
-                <span>Chris Mom & Child Leaderboard</span>
-            </div>
-        </div>
-
-        <button id="refreshBtn" class="refresh" onclick="loadData()">
-            <i class="fas fa-bolt"></i> Refresh
-        </button>
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th><i class="fas fa-user-ninja"></i> Player</th>
-                <th><i class="fas fa-fire-flame-curved"></i> Power</th>
-            </tr>
-        </thead>
-        <tbody id="board"></tbody>
-    </table>
-
-</div>
-</div>
-
+<!-- PARTICLES (snow, fire, gifts) -->
 <script>
-/* PARTICLES */
-const icons=["❄","🔥","✨"];
+const icons=["❄","🎁","🎄","🎅"];
 for(let i=0;i<80;i++){
     const p=document.createElement("div");
     p.className="particle";
     p.textContent=icons[Math.floor(Math.random()*icons.length)];
     p.style.left=Math.random()*100+"vw";
-    p.style.fontSize=12+Math.random()*22+"px";
-    p.style.animationDuration=6+Math.random()*12+"s";
+    p.style.fontSize=12+Math.random()*20+"px";
+    p.style.animationDuration=5+Math.random()*12+"s";
+    p.style.opacity=Math.random();
     document.body.appendChild(p);
 }
+</script>
 
-/* LIVE DATA */
-const SHEET_URL =
-"https://docs.google.com/spreadsheets/d/1s1XHXFJe0_o2fp7ysxb0AFcoqmkna2C8rO_kcuyeolQ/gviz/tq?tqx=out:csv";
+<div class="container">
+<div class="card">
+
+<div class="header">
+    <div class="title">
+        <i class="fas fa-gift"></i>
+        <div>
+            <h1>Leaderboard <span class="festive-icon">🎄</span></h1>
+            <span>Chris Mom & Child Leaderboard</span>
+        </div>
+    </div>
+    <button id="refreshBtn" class="refresh" onclick="loadData()">
+        <i class="fas fa-rotate"></i> Refresh
+    </button>
+</div>
+
+<table>
+<thead>
+<tr>
+    <th>Rank</th>
+    <th><i class="fas fa-user"></i> Player</th>
+    <th><i class="fas fa-star"></i> Points</th>
+</tr>
+</thead>
+<tbody id="board"></tbody>
+</table>
+
+</div>
+</div>
+
+<script>
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/1s1XHXFJe0_o2fp7ysxb0AFcoqmkna2C8rO_kcuyeolQ/gviz/tq?tqx=out:csv";
 
 async function loadData(){
     const btn=document.getElementById("refreshBtn");
@@ -298,22 +252,24 @@ async function loadData(){
             const tr=document.createElement("tr");
             tr.className="row"+(p.points===top?" first":"");
             tr.innerHTML=`
-                <td class="rank">
-                    ${p.points===top?'<i class="fas fa-crown"></i>#1':`#${i+1}`}
-                </td>
-                <td>${p.name}</td>
-                <td class="score">${p.points}</td>`;
+                <td class="rank">${p.points===top?'<i class="fas fa-crown"></i>#1':`#${i+1}`}</td>
+                <td>${p.name} ${p.points===top?'<span class="festive-icon">🎅</span>':''}</td>
+                <td class="points">${p.points}</td>
+            `;
             tbody.appendChild(tr);
         });
     }catch(e){
         tbody.innerHTML="<tr><td colspan='3'>Failed to load data</td></tr>";
         console.error(e);
     }
+
     btn.classList.remove("spin");
 }
+
 loadData();
 </script>
 
 </body>
 </html>
+
 
