@@ -319,9 +319,6 @@
   .table-container::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 42, 42, 0.7);
   }
-  table tbody tr:last-child td {
-  padding-bottom: 60px;
-}
 </style>
 </head>
 <body>
@@ -420,7 +417,7 @@
     data.forEach((p, i) => {
       const isFirst = p.points === topPoints && topPoints > 0;
       const tr = document.createElement("tr");
-      tr.className = "row" + (isFirst ? " first" : "");
+      tr.className = "row";
       tr.innerHTML = `
         <td class="rank">${isFirst ? '<i class="fas fa-crown"></i>#1' : "#" + (i + 1)}</td>
         <td>${p.name} ${isFirst ? '<span class="festive-icon">🎅</span>' : ""}</td>
@@ -444,5 +441,6 @@
   </script>
 </body>
 </html>
+
 
 
