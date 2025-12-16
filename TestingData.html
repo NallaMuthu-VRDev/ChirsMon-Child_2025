@@ -1,109 +1,246 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Excel Data Loader</title>
-    <style>
-        table {
-            border-collapse: collapse;
-        }
-        td, th {
-            padding: 6px 10px;
-            border: 1px solid #444;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Chris Mom & Child Leaderboard</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+/* ===== Card ===== */
+.card {
+    width: 100%;
+    max-width: 900px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+}
+
+/* ===== Header ===== */
+.leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.leaderboard-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.leaderboard-title i {
+    font-size: 34px;
+    color: #ffd700;
+    text-shadow: 0 0 20px rgba(255,215,0,0.8);
+}
+
+.leaderboard-title h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.leaderboard-title span {
+    font-size: 12px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===== Refresh Button ===== */
+.refresh-btn {
+    background: linear-gradient(135deg, #00eaff, #00ffa6);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 22px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 0 25px rgba(0,234,255,0.5);
+    transition: 0.3s;
+}
+
+.refresh-btn:hover {
+    transform: scale(1.08);
+}
+
+.refresh-btn i.spin {
+    animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== Table ===== */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+
+th {
+    text-align: left;
+    opacity: 0.7;
+    font-size: 13px;
+    padding: 8px 16px;
+}
+
+td {
+    padding: 16px;
+}
+
+/* ===== Rows ===== */
+.row {
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    transition: 0.35s ease;
+}
+
+.row:hover {
+    background: rgba(255,255,255,0.1);
+    transform: scale(1.01);
+}
+
+/* ===== First Place ===== */
+.first {
+    background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,255,255,0.08));
+    box-shadow: 0 0 35px rgba(255,215,0,0.5);
+}
+
+.rank i {
+    color: #ffd700;
+    margin-right: 6px;
+}
+
+.score {
+    font-weight: 700;
+}
+
+/* ===== Loader ===== */
+.loader {
+    text-align: center;
+    padding: 20px;
+    opacity: 0.8;
+}
+</style>
 </head>
+
 <body>
 
-<h2>Google Sheet Data</h2>
-<button onclick="loadData()">🔄 Refresh Data</button>
+<div class="card">
 
-<table id="dataTable"></table>
+    <div class="leaderboard-header">
+        <div class="leaderboard-title">
+            <i class="fas fa-trophy"></i>
+            <div>
+                <h2>Leaderboard</h2>
+                <span>Live Rankings</span>
+            </div>
+        </div>
+
+        <button class="refresh-btn" onclick="loadData()">
+            <i id="refreshIcon" class="fas fa-sync-alt"></i>
+            Refresh
+        </button>
+    </div>
+
+    <div id="loader" class="loader">Loading data...</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Points</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboard"></tbody>
+    </table>
+
+</div>
 
 <script>
-const sheetURL =
-    "https://docs.google.com/spreadsheets/d/1s1XHXFJe0_o2fp7ysxb0AFcoqmkna2C8rO_kcuyeolQ/gviz/tq?tqx=out:csv";
+/* 🔗 Replace SPREADSHEET_ID */
+const SHEET_URL =
+  "https://docs.google.com/spreadsheets/d/1s1XHXFJe0_o2fp7ysxb0AFcoqmkna2C8rO_kcuyeolQ/gviz/tq?tqx=out:csv";
 
 async function loadData() {
-    console.clear();
-    console.log("🔄 Loading Google Sheet data...");
-    console.log("📄 Sheet URL:", sheetURL);
+    const icon = document.getElementById("refreshIcon");
+    const loader = document.getElementById("loader");
+    const tbody = document.getElementById("leaderboard");
+
+    icon.classList.add("spin");
+    loader.style.display = "block";
+    tbody.innerHTML = "";
 
     try {
-        const response = await fetch(sheetURL);
+        const res = await fetch(SHEET_URL);
+        const text = await res.text();
 
-        console.log("📡 Fetch response:", response);
+        const rows = text.trim().split("\n").map(r => r.split(","));
+        rows.shift(); // remove header
 
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`);
-        }
+        const data = rows.map(r => ({
+            name: r[0],
+            points: Number(r[1])
+        }));
 
-        const text = await response.text();
-        console.log("📜 Raw CSV data:\n", text);
+        data.sort((a, b) => b.points - a.points);
+        const topScore = data[0]?.points;
 
-        const rows = parseCSV(text);
-        console.log("📊 Parsed rows:", rows);
-
-        const table = document.getElementById("dataTable");
-        table.innerHTML = "";
-
-        rows.forEach((row, rowIndex) => {
+        data.forEach(p => {
             const tr = document.createElement("tr");
+            tr.classList.add("row");
 
-            row.forEach(cell => {
-                const td = document.createElement(rowIndex === 0 ? "th" : "td");
-                td.textContent = cell;
-                tr.appendChild(td);
-            });
+            if (p.points === topScore) tr.classList.add("first");
 
-            table.appendChild(tr);
+            tr.innerHTML = `
+                <td class="rank">
+                    ${p.points === topScore ? '<i class="fas fa-crown"></i>#1' : ''}
+                </td>
+                <td>${p.name}</td>
+                <td class="score">${p.points}</td>
+            `;
+
+            tbody.appendChild(tr);
         });
 
-        console.log("✅ Table rendered successfully");
-
-    } catch (error) {
-        console.error("❌ Failed to load sheet:", error);
-        alert("Error loading data. Check console logs.");
+    } catch (err) {
+        loader.innerText = "Failed to load data";
+        console.error(err);
     }
+
+    icon.classList.remove("spin");
+    loader.style.display = "none";
 }
 
-/* Proper CSV parser (handles quoted commas) */
-function parseCSV(csvText) {
-    const rows = [];
-    let currentRow = [];
-    let currentCell = "";
-    let insideQuotes = false;
-
-    for (let i = 0; i < csvText.length; i++) {
-        const char = csvText[i];
-
-        if (char === '"' && csvText[i + 1] === '"') {
-            currentCell += '"';
-            i++;
-        } else if (char === '"') {
-            insideQuotes = !insideQuotes;
-        } else if (char === "," && !insideQuotes) {
-            currentRow.push(currentCell.trim());
-            currentCell = "";
-        } else if (char === "\n" && !insideQuotes) {
-            currentRow.push(currentCell.trim());
-            rows.push(currentRow);
-            currentRow = [];
-            currentCell = "";
-        } else {
-            currentCell += char;
-        }
-    }
-
-    if (currentCell) {
-        currentRow.push(currentCell.trim());
-        rows.push(currentRow);
-    }
-
-    return rows;
-}
-
-// Auto-load on page open
-window.onload = loadData;
+/* Auto-load */
+loadData();
 </script>
 
 </body>
