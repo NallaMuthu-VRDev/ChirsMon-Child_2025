@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ChrisMax Leaderboard</title>
+<title>ChrisMax Cyberpunk Leaderboard</title>
 
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
@@ -17,21 +17,40 @@
 html, body{
     height:100%;
     width:100%;
-    overflow:hidden;
     font-family:'Poppins',sans-serif;
     background:#070b12;
     color:#fff;
     position:relative;
+    overflow:hidden;
 }
 
-/* ===== BACKGROUND PARTICLES ===== */
+/* ===== CYBER GRID ===== */
+.grid{
+    position:fixed;
+    inset:0;
+    background:
+      linear-gradient(rgba(255,42,42,.25) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,42,42,.25) 1px, transparent 1px);
+    background-size:40px 40px;
+    transform-origin:center;
+    transform:perspective(800px) rotateX(60deg);
+    animation:gridMove 20s linear infinite;
+    opacity:.25;
+    z-index:0;
+}
+@keyframes gridMove{
+    from{background-position:0 0,0 0}
+    to{background-position:0 800px,800px 0}
+}
+
+/* ===== PARTICLES ===== */
 .particle{
     position:fixed;
     top:-10px;
     pointer-events:none;
     animation:fall linear infinite;
     opacity:.8;
-    z-index:0;
+    z-index:1;
     font-size:14px;
 }
 @keyframes fall{
@@ -42,17 +61,36 @@ html, body{
 .container{
     max-width:1050px;
     margin:40px auto;
-    padding:20px;
+    padding:25px;
     position:relative;
     z-index:3;
+    border-radius:28px;
+    background:linear-gradient(135deg, rgba(255,42,42,0.12), rgba(0,0,0,0.4));
+    box-shadow:0 0 50px rgba(255,42,42,0.4);
+    border:1px solid rgba(255,42,42,0.2);
 }
+
+/* Container icons */
+.container::before,
+.container::after{
+    content:"🎁🎄🎅❄";
+    position:absolute;
+    font-size:20px;
+    opacity:0.6;
+    animation:floatIcon 5s infinite alternate;
+}
+.container::before{top:-10px; left:10px;}
+.container::after{bottom:-10px; right:10px;}
+@keyframes floatIcon{50%{transform:translateY(-8px) rotate(15deg)}}
 
 /* ===== HEADER ===== */
 .header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:20px;
+    margin-bottom:12px;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(255,42,42,0.5);
 }
 .header .title{
     display:flex;
@@ -68,7 +106,7 @@ html, body{
 @keyframes pulse{50%{transform:scale(1.15)}}
 .header .title h1{
     font-family:'Space Grotesk',sans-serif;
-    font-size:30px;
+    font-size:28px;
 }
 .header .title span{
     font-size:12px;
@@ -88,7 +126,7 @@ html, body{
     align-items:center;
     gap:10px;
     cursor:pointer;
-    box-shadow:0 0 25px rgba(255,42,42,.7);
+    box-shadow:0 0 30px rgba(255,42,42,.7);
     transition:.3s;
     z-index:3;
 }
@@ -98,28 +136,36 @@ html, body{
 
 /* ===== TABLE CARD ===== */
 .card{
-    background:linear-gradient(135deg, rgba(255,42,42,.1), rgba(0,0,0,.5));
-    backdrop-filter:blur(12px);
+    background:linear-gradient(135deg, rgba(255,42,42,0.08), rgba(0,0,0,0.4));
     border-radius:26px;
-    padding:20px;
-    box-shadow:0 0 50px rgba(255,42,42,.5);
-    border:1px solid rgba(255,42,42,.2);
+    border:1px solid rgba(255,42,42,0.2);
+    box-shadow:0 0 50px rgba(255,42,42,0.3);
+    padding:15px;
 }
 
 /* ===== TABLE ===== */
+.table-container{
+    max-height:400px; /* scrollable height */
+    overflow-y:auto;
+    margin-top:10px;
+}
 table{
     width:100%;
     border-collapse:separate;
-    border-spacing:0 14px;
+    border-spacing:0 12px;
 }
 th{
     font-size:14px;
     opacity:.7;
     text-align:left;
     padding:10px 20px;
+    position:sticky;
+    top:0;
+    background:rgba(0,0,0,0.4);
+    z-index:2;
 }
 td{
-    padding:15px 20px;
+    padding:14px 20px;
     font-size:15px;
 }
 
@@ -172,18 +218,15 @@ td{
 @keyframes icon-bounce{
     50%{transform:translateY(-4px);}
 }
-
-/* ===== PULSE ===== */
-@keyframes pulse{
-    0%,100%{transform:scale(1);}
-    50%{transform:scale(1.15);}
-}
 </style>
 </head>
 
 <body>
 
-<!-- PARTICLES (snow, fire, gifts) -->
+<!-- Cyber Grid -->
+<div class="grid"></div>
+
+<!-- PARTICLES -->
 <script>
 const icons=["❄","🎁","🎄","🎅"];
 for(let i=0;i<80;i++){
@@ -214,6 +257,7 @@ for(let i=0;i<80;i++){
     </button>
 </div>
 
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -224,6 +268,7 @@ for(let i=0;i<80;i++){
 </thead>
 <tbody id="board"></tbody>
 </table>
+</div>
 
 </div>
 </div>
@@ -241,23 +286,25 @@ async function loadData(){
     try{
         const res=await fetch(SHEET_URL);
         const txt=await res.text();
-        const rows=txt.trim().split("\n").map(r=>r.split(","));
-        rows.shift();
+        const rows=txt.trim().split("\n").map(r=>r.split(",").map(c=>c.trim())); // Trim spaces
 
-        const data=rows.map(r=>({name:r[0],points:+r[1]}));
-        data.sort((a,b)=>b.points-a.points);
-        const top=data[0]?.points;
+        rows.shift(); // remove header
+
+        const data=rows.map(r=>({name:r[0], points: Number(r[1]) || 0}));
+        data.sort((a,b)=>b.points - a.points);
+        const topPoints = data[0]?.points;
 
         data.forEach((p,i)=>{
             const tr=document.createElement("tr");
-            tr.className="row"+(p.points===top?" first":"");
+            tr.className="row"+(p.points===topPoints?" first":"");
             tr.innerHTML=`
-                <td class="rank">${p.points===top?'<i class="fas fa-crown"></i>#1':`#${i+1}`}</td>
-                <td>${p.name} ${p.points===top?'<span class="festive-icon">🎅</span>':''}</td>
+                <td class="rank">${p.points===topPoints?'<i class="fas fa-crown"></i>#1':`#${i+1}`}</td>
+                <td>${p.name} ${p.points===topPoints?'<span class="festive-icon">🎅</span>':''}</td>
                 <td class="points">${p.points}</td>
             `;
             tbody.appendChild(tr);
         });
+
     }catch(e){
         tbody.innerHTML="<tr><td colspan='3'>Failed to load data</td></tr>";
         console.error(e);
@@ -271,5 +318,3 @@ loadData();
 
 </body>
 </html>
-
-
