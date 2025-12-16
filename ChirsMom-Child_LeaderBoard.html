@@ -215,12 +215,70 @@
 
   /* ===== TABLE ===== */
   .table-container {
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex-grow: 1;
-  margin-top: 10px;
-  max-height: calc(100vh - 180px); /* or adjust as needed */
+  max-height: calc(100vh - 240px); /* adjust based on header height */
+  overflow-y: auto; /* scroll only tbody */
+  overflow-x: hidden; /* no horizontal scroll */
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead, tbody {
+  display: block; /* allow separate scroll for tbody */
+}
+
+thead tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+tbody {
+  display: block;
+  max-height: 400px; /* set visible height for rows, table scrolls here */
+  overflow-y: auto;
+  width: 100%;
+}
+
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+th, td {
+  padding: 12px 20px;
+  text-align: left;
+}
+
+thead th {
+  background: rgba(255, 0, 0, 0.2); /* header background */
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Scrollbar styling for tbody */
+tbody::-webkit-scrollbar {
+  width: 10px;
+}
+
+tbody::-webkit-scrollbar-track {
+  background: rgba(255, 42, 42, 0.05);
+  border-radius: 5px;
+}
+
+tbody::-webkit-scrollbar-thumb {
+  background: rgba(255, 42, 42, 0.4);
+  border-radius: 5px;
+}
+
+tbody::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 42, 42, 0.7);
+}
+
   table {
     width: 100%;
     table-layout: fixed;
@@ -441,6 +499,7 @@
   </script>
 </body>
 </html>
+
 
 
 
