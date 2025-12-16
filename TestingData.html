@@ -215,11 +215,12 @@
 
   /* ===== TABLE ===== */
   .table-container {
-    overflow-y: auto;
-    overflow-x: hidden;
-    flex-grow: 1;
-    margin-top: 10px;
-  }
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-grow: 1;
+  margin-top: 10px;
+  max-height: calc(100vh - 180px); /* or adjust as needed */
+}
   table {
     width: 100%;
     table-layout: fixed;
@@ -375,52 +376,69 @@
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/1s1XHXFJe0_o2fp7ysxb0AFcoqmkna2C8rO_kcuyeolQ/gviz/tq?tqx=out:csv";
 
     async function loadData() {
-      const btn = document.getElementById("refreshBtn");
-      btn.classList.add("spin");
+  const btn = document.getElementById("refreshBtn");
+  btn.classList.add("spin");
 
-      const tbody = document.getElementById("board");
-      tbody.innerHTML = "";
+  const tbody = document.getElementById("board");
+  tbody.innerHTML = "";
 
-      try {
-        const res = await fetch(SHEET_URL);
-        const txt = await res.text();
-        const rows = txt
-          .trim()
-          .split("\n")
-          .map((r) => r.split(",").map((c) => c.trim()));
+  try {
+    const res = await fetch(SHEET_URL);
+    const txt = await res.text();
 
-        rows.shift(); // remove header
+    console.log("Raw CSV data:", txt);
 
-        // Parse data and convert points safely to numbers (default 0 if invalid)
-        const data = rows.map((r) => ({
-          name: r[0].replace(/(^"|"$)/g, ""), // Remove surrounding quotes if any
-          points: Number(r[1]) || 0,
-        }));
+    const rows = txt.trim().split("\n").map(row => {
+      return row.split(",").map(cell => cell.trim());
+    });
 
-        data.sort((a, b) => b.points - a.points);
-        const topPoints = data.length > 0 ? data[0].points : 0;
+    console.log("Parsed rows:", rows);
 
-        data.forEach((p, i) => {
-          const isFirst = p.points === topPoints;
-          const tr = document.createElement("tr");
-          tr.className = "row" + (isFirst ? " first" : "");
-          tr.innerHTML = `
-            <td class="rank">${isFirst ? '<i class="fas fa-crown"></i>#1' : "#" + (i + 1)}</td>
-            <td>${p.name} ${isFirst ? '<span class="festive-icon">🎅</span>' : ""}</td>
-            <td class="points">${p.points}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch (e) {
-        tbody.innerHTML =
-          "<tr><td colspan='3'>Failed to load data</td></tr>";
-        console.error(e);
-      }
+    rows.shift(); // Remove header row
 
-      btn.classList.remove("spin");
+    const data = rows.map(r => {
+      let name = r[0] || "";
+      let pointsRaw = r[1] || "0";
+
+      name = name.replace(/^"|"$/g, ""); // Remove quotes
+      let points = Number(pointsRaw.replace(/[^0-9.-]+/g, "")); // Clean & convert
+
+      if (isNaN(points)) points = 0;
+
+      return { name, points };
+    });
+
+    console.log("Final data:", data);
+
+    data.sort((a, b) => b.points - a.points);
+
+    const topPoints = data.length > 0 ? data[0].points : 0;
+
+    data.forEach((p, i) => {
+      const isFirst = p.points === topPoints && topPoints > 0;
+      const tr = document.createElement("tr");
+      tr.className = "row" + (isFirst ? " first" : "");
+      tr.innerHTML = `
+        <td class="rank">${isFirst ? '<i class="fas fa-crown"></i>#1' : "#" + (i + 1)}</td>
+        <td>${p.name} ${isFirst ? '<span class="festive-icon">🎅</span>' : ""}</td>
+        <td class="points">${p.points}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    if (data.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='3'>No data available</td></tr>";
     }
+  } catch (e) {
+    tbody.innerHTML = "<tr><td colspan='3'>Failed to load data</td></tr>";
+    console.error(e);
+  }
+
+  btn.classList.remove("spin");
+}
 
     loadData();
   </script>
 </body>
 </html>
+
