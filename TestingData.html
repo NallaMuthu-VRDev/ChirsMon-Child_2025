@@ -11,235 +11,306 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+*{margin:0;padding:0;box-sizing:border-box}
 
-body {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    font-family: 'Poppins', sans-serif;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    padding: 60px 20px;
+/* ===== BASE ===== */
+body{
+    min-height:100vh;
+    background:#070b12;
+    font-family:'Poppins',sans-serif;
+    color:#fff;
+    overflow:hidden;
 }
 
-/* ===== Card ===== */
-.card {
-    width: 100%;
-    max-width: 900px;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(14px);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+/* ===== CYBER GRID ===== */
+.grid{
+    position:fixed;
+    inset:0;
+    background:
+      linear-gradient(rgba(255,42,42,.25) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,42,42,.25) 1px, transparent 1px);
+    background-size:40px 40px;
+    transform-origin:center;
+    transform:perspective(800px) rotateX(60deg);
+    animation:gridMove 20s linear infinite;
+    opacity:.25;
+    z-index:0;
+}
+@keyframes gridMove{
+    from{background-position:0 0,0 0}
+    to{background-position:0 800px,800px 0}
 }
 
-/* ===== Header ===== */
-.leaderboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
+/* ===== NEON WAVE ===== */
+.wave{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    height:40%;
+    z-index:0;
+    opacity:.7;
+}
+.wave svg{
+    width:100%;
+    height:100%;
+}
+.wave path{
+    fill:none;
+    stroke:#ff2a2a;
+    stroke-width:3;
+    filter:drop-shadow(0 0 20px #ff2a2a);
+    animation:waveMove 6s ease-in-out infinite;
+}
+@keyframes waveMove{
+    50%{transform:translateX(-40px)}
 }
 
-.leaderboard-title {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+/* ===== PARTICLES ===== */
+.particle{
+    position:fixed;
+    top:-10px;
+    pointer-events:none;
+    animation:fall linear infinite;
+    opacity:.8;
+    z-index:1;
+}
+@keyframes fall{
+    to{transform:translateY(110vh)}
 }
 
-.leaderboard-title i {
-    font-size: 34px;
-    color: #ffd700;
-    text-shadow: 0 0 20px rgba(255,215,0,0.8);
+/* ===== LAYOUT ===== */
+.container{
+    max-width:1050px;
+    margin:70px auto;
+    padding:30px;
+    position:relative;
+    z-index:3;
 }
 
-.leaderboard-title h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
+/* ===== CARD ===== */
+.card{
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(18px);
+    border-radius:26px;
+    padding:34px;
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:
+      0 0 80px rgba(255,42,42,.25),
+      inset 0 0 40px rgba(255,42,42,.1);
 }
 
-.leaderboard-title span {
-    font-size: 12px;
-    opacity: 0.7;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+/* ===== HEADER ===== */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:28px;
+    padding-bottom:20px;
+    border-bottom:1px solid rgba(255,255,255,.15);
+    position:relative;
+}
+.header::after{
+    content:"";
+    position:absolute;
+    bottom:-1px;
+    left:0;
+    width:160px;
+    height:3px;
+    background:linear-gradient(90deg,#ff2a2a,transparent);
+    animation:sweep 3s infinite;
+}
+@keyframes sweep{
+    0%{width:40px;opacity:.3}
+    50%{width:160px;opacity:1}
+    100%{width:40px;opacity:.3}
 }
 
-/* ===== Refresh Button ===== */
-.refresh-btn {
-    background: linear-gradient(135deg, #00eaff, #00ffa6);
-    border: none;
-    border-radius: 30px;
-    padding: 12px 22px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 0 25px rgba(0,234,255,0.5);
-    transition: 0.3s;
+/* ===== TITLE ===== */
+.title{
+    display:flex;
+    gap:16px;
+    align-items:center;
+}
+.title i{
+    font-size:40px;
+    color:#ff2a2a;
+    text-shadow:0 0 30px rgba(255,42,42,.9);
+    animation:pulse 2.2s infinite;
+}
+@keyframes pulse{50%{transform:scale(1.15)}}
+
+.title h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:32px;
+}
+.title span{
+    font-size:12px;
+    opacity:.7;
+    letter-spacing:1px;
+    text-transform:uppercase;
 }
 
-.refresh-btn:hover {
-    transform: scale(1.08);
+/* ===== REFRESH ===== */
+.refresh{
+    background:linear-gradient(135deg,#ff2a2a,#ff6a6a);
+    border:none;
+    padding:15px 30px;
+    border-radius:40px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    box-shadow:0 0 40px rgba(255,42,42,.9);
+    transition:.3s;
+}
+.refresh:hover{transform:scale(1.12)}
+.refresh.spin i{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== TABLE ===== */
+table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0 16px;
+}
+th{
+    font-size:13px;
+    opacity:.7;
+    text-align:left;
+    padding:12px 20px;
+}
+td{
+    padding:20px;
 }
 
-.refresh-btn i.spin {
-    animation: spin 1.2s linear infinite;
+/* ===== ROWS ===== */
+.row{
+    background:rgba(255,255,255,.06);
+    border-radius:18px;
+    transition:.35s;
+}
+.row:hover{
+    transform:translateY(-3px) scale(1.02);
+    box-shadow:0 0 40px rgba(255,42,42,.5);
 }
 
-@keyframes spin {
-    100% { transform: rotate(360deg); }
+/* ===== RANK ===== */
+.rank{
+    font-weight:900;
+    font-size:18px;
+}
+.rank i{color:#ff2a2a;margin-right:8px}
+
+/* ===== FIRST ===== */
+.first{
+    background:linear-gradient(135deg,rgba(255,42,42,.5),rgba(255,255,255,.08));
+    box-shadow:0 0 60px rgba(255,42,42,1);
 }
 
-/* ===== Table ===== */
-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 12px;
-}
-
-th {
-    text-align: left;
-    opacity: 0.7;
-    font-size: 13px;
-    padding: 8px 16px;
-}
-
-td {
-    padding: 16px;
-}
-
-/* ===== Rows ===== */
-.row {
-    background: rgba(255,255,255,0.06);
-    border-radius: 14px;
-    transition: 0.35s ease;
-}
-
-.row:hover {
-    background: rgba(255,255,255,0.1);
-    transform: scale(1.01);
-}
-
-/* ===== First Place ===== */
-.first {
-    background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,255,255,0.08));
-    box-shadow: 0 0 35px rgba(255,215,0,0.5);
-}
-
-.rank i {
-    color: #ffd700;
-    margin-right: 6px;
-}
-
-.score {
-    font-weight: 700;
-}
-
-/* ===== Loader ===== */
-.loader {
-    text-align: center;
-    padding: 20px;
-    opacity: 0.8;
+/* ===== SCORE ===== */
+.score{
+    font-weight:800;
+    color:#ff4d4d;
+    text-shadow:0 0 15px rgba(255,42,42,.7);
 }
 </style>
 </head>
 
 <body>
 
+<!-- Cyber Grid -->
+<div class="grid"></div>
+
+<!-- Neon Wave -->
+<div class="wave">
+<svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+  <path d="M0,160 C240,220 480,100 720,140 960,180 1200,80 1440,120"/>
+</svg>
+</div>
+
+<div class="container">
 <div class="card">
 
-    <div class="leaderboard-header">
-        <div class="leaderboard-title">
-            <i class="fas fa-trophy"></i>
+    <div class="header">
+        <div class="title">
+            <i class="fas fa-fire"></i>
             <div>
-                <h2>Leaderboard</h2>
-                <span>Live Rankings</span>
+                <h1>Leaderboard</h1>
+                <span>ChrisMax Cyberpunk</span>
             </div>
         </div>
 
-        <button class="refresh-btn" onclick="loadData()">
-            <i id="refreshIcon" class="fas fa-sync-alt"></i>
-            Refresh
+        <button id="refreshBtn" class="refresh" onclick="loadData()">
+            <i class="fas fa-bolt"></i> Refresh
         </button>
     </div>
-
-    <div id="loader" class="loader">Loading data...</div>
 
     <table>
         <thead>
             <tr>
                 <th>Rank</th>
-                <th>Name</th>
-                <th>Points</th>
+                <th><i class="fas fa-user-ninja"></i> Player</th>
+                <th><i class="fas fa-fire-flame-curved"></i> Power</th>
             </tr>
         </thead>
-        <tbody id="leaderboard"></tbody>
+        <tbody id="board"></tbody>
     </table>
 
 </div>
+</div>
 
 <script>
-/* 🔗 Replace SPREADSHEET_ID */
-const SHEET_URL =
-  "https://docs.google.com/spreadsheets/d/1s1XHXFJe0_o2fp7ysxb0AFcoqmkna2C8rO_kcuyeolQ/gviz/tq?tqx=out:csv";
-
-async function loadData() {
-    const icon = document.getElementById("refreshIcon");
-    const loader = document.getElementById("loader");
-    const tbody = document.getElementById("leaderboard");
-
-    icon.classList.add("spin");
-    loader.style.display = "block";
-    tbody.innerHTML = "";
-
-    try {
-        const res = await fetch(SHEET_URL);
-        const text = await res.text();
-
-        const rows = text.trim().split("\n").map(r => r.split(","));
-        rows.shift(); // remove header
-
-        const data = rows.map(r => ({
-            name: r[0],
-            points: Number(r[1])
-        }));
-
-        data.sort((a, b) => b.points - a.points);
-        const topScore = data[0]?.points;
-
-        data.forEach(p => {
-            const tr = document.createElement("tr");
-            tr.classList.add("row");
-
-            if (p.points === topScore) tr.classList.add("first");
-
-            tr.innerHTML = `
-                <td class="rank">
-                    ${p.points === topScore ? '<i class="fas fa-crown"></i>#1' : ''}
-                </td>
-                <td>${p.name}</td>
-                <td class="score">${p.points}</td>
-            `;
-
-            tbody.appendChild(tr);
-        });
-
-    } catch (err) {
-        loader.innerText = "Failed to load data";
-        console.error(err);
-    }
-
-    icon.classList.remove("spin");
-    loader.style.display = "none";
+/* PARTICLES */
+const icons=["❄","🔥","✨"];
+for(let i=0;i<80;i++){
+    const p=document.createElement("div");
+    p.className="particle";
+    p.textContent=icons[Math.floor(Math.random()*icons.length)];
+    p.style.left=Math.random()*100+"vw";
+    p.style.fontSize=12+Math.random()*22+"px";
+    p.style.animationDuration=6+Math.random()*12+"s";
+    document.body.appendChild(p);
 }
 
-/* Auto-load */
+/* LIVE DATA */
+const SHEET_URL =
+"https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/gviz/tq?tqx=out:csv";
+
+async function loadData(){
+    const btn=document.getElementById("refreshBtn");
+    btn.classList.add("spin");
+
+    const tbody=document.getElementById("board");
+    tbody.innerHTML="";
+
+    try{
+        const res=await fetch(SHEET_URL);
+        const txt=await res.text();
+        const rows=txt.trim().split("\n").map(r=>r.split(","));
+        rows.shift();
+
+        const data=rows.map(r=>({name:r[0],points:+r[1]}));
+        data.sort((a,b)=>b.points-a.points);
+        const top=data[0]?.points;
+
+        data.forEach((p,i)=>{
+            const tr=document.createElement("tr");
+            tr.className="row"+(p.points===top?" first":"");
+            tr.innerHTML=`
+                <td class="rank">
+                    ${p.points===top?'<i class="fas fa-crown"></i>#1':`#${i+1}`}
+                </td>
+                <td>${p.name}</td>
+                <td class="score">${p.points}</td>`;
+            tbody.appendChild(tr);
+        });
+    }catch(e){
+        tbody.innerHTML="<tr><td colspan='3'>Failed to load data</td></tr>";
+        console.error(e);
+    }
+    btn.classList.remove("spin");
+}
 loadData();
 </script>
 
