@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>🎄 Christmas Office Family Directory</title>
+<title>🎄 Office Christmas Family Directory</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+<!-- Professional Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -15,23 +15,40 @@
 body {
     margin: 0;
     background: radial-gradient(circle, #0b3d2e, #021b13);
-    font-family: 'Mountains of Christmas', cursive;
+    font-family: 'Poppins', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     color: #fff;
     overflow-x: hidden;
 }
 
+/* Header */
 header {
     text-align: center;
-    padding: 40px 20px;
-    font-size: 3rem;
+    padding: 35px 20px;
+    font-size: 2.6rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     animation: glow 2s infinite alternate;
 }
 
 @keyframes glow {
-    from { text-shadow: 0 0 10px #ff0000; }
-    to { text-shadow: 0 0 25px #00ffcc; }
+    from { text-shadow: 0 0 8px #ff4d4d; }
+    to { text-shadow: 0 0 20px #00ffcc; }
 }
 
+/* Search */
+#searchInput {
+    width: 70%;
+    max-width: 500px;
+    padding: 14px 18px;
+    font-size: 1rem;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* Cards */
 .container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -45,7 +62,7 @@ header {
     padding: 25px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.5);
     transform: scale(0.95);
-    animation: pop 1s forwards;
+    animation: pop 0.8s forwards;
     position: relative;
 }
 
@@ -55,10 +72,10 @@ header {
 
 .card::before {
     content: "🎄";
-    font-size: 3rem;
+    font-size: 2.5rem;
     position: absolute;
-    top: -20px;
-    right: 20px;
+    top: -18px;
+    right: 18px;
     animation: spin 6s linear infinite;
 }
 
@@ -68,33 +85,35 @@ header {
 }
 
 .title {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .info {
-    font-size: 1.2rem;
-    margin: 8px 0;
+    font-size: 1rem;
+    margin: 6px 0;
 }
 
 .child {
     background: rgba(255,255,255,0.15);
-    padding: 15px;
-    border-radius: 15px;
-    margin-top: 15px;
+    padding: 14px;
+    border-radius: 14px;
+    margin-top: 14px;
+    font-size: 0.95rem;
 }
 
+/* Snow */
 .snow {
     position: fixed;
     top: -10px;
     color: white;
+    pointer-events: none;
     animation: snow 10s linear infinite;
 }
 
 @keyframes snow {
-    to {
-        transform: translateY(110vh);
-    }
+    to { transform: translateY(110vh); }
 }
 </style>
 </head>
@@ -105,12 +124,22 @@ header {
     🎅 Office Christmas Family 🎁
 </header>
 
+<!-- Search Bar -->
+<div style="text-align:center; margin-bottom: 10px;">
+    <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search by Employee / Child Name or Office ID"
+    >
+</div>
+
+<!-- Cards -->
 <div class="container" id="cards"></div>
 
 <script>
 // ❄️ Snow Effect
 for (let i = 0; i < 50; i++) {
-    let snow = document.createElement("div");
+    const snow = document.createElement("div");
     snow.className = "snow";
     snow.innerHTML = "❄";
     snow.style.left = Math.random() * 100 + "vw";
@@ -118,7 +147,7 @@ for (let i = 0; i < 50; i++) {
     document.body.appendChild(snow);
 }
 
-// 🔗 Google Sheet JSON
+// 🔗 Google Sheet
 const sheetID = "1qls6hzsVn0zb4vzH2FWl_XLP1YJ3OqtSR9a3MNRrxjI";
 const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
 
@@ -130,25 +159,35 @@ fetch(sheetURL)
         const container = document.getElementById("cards");
 
         rows.forEach(row => {
+            const empName = row.c[0].v;
+            const empID = row.c[1].v;
+            const childName = row.c[2].v;
+            const childID = row.c[3].v;
+
             const card = document.createElement("div");
             card.className = "card";
 
+            // Search data
+            card.setAttribute(
+                "data-search",
+                `${empName} ${empID} ${childName} ${childID}`.toLowerCase()
+            );
+
             card.innerHTML = `
                 <div class="title">
-                    <i class="fas fa-user-tie"></i>
-                    ${row.c[0].v}
+                    <i class="fas fa-user-tie"></i> ${empName}
                 </div>
                 <div class="info">
-                    🏢 Office ID: <strong>${row.c[1].v}</strong>
+                    🏢 Office ID: <strong>${empID}</strong>
                 </div>
 
                 <div class="child">
                     <div class="info">
                         <i class="fas fa-child"></i>
-                        Child: <strong>${row.c[2].v}</strong>
+                        Child: <strong>${childName}</strong>
                     </div>
                     <div class="info">
-                        🎫 Child Office ID: <strong>${row.c[3].v}</strong>
+                        🎫 Child Office ID: <strong>${childID}</strong>
                     </div>
                 </div>
             `;
@@ -156,6 +195,16 @@ fetch(sheetURL)
             container.appendChild(card);
         });
     });
+
+// 🔍 Search Logic
+document.getElementById("searchInput").addEventListener("keyup", function () {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.display = card.dataset.search.includes(query)
+            ? "block"
+            : "none";
+    });
+});
 </script>
 
 </body>
