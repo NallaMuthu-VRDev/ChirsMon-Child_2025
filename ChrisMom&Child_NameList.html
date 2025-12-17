@@ -159,10 +159,10 @@ fetch(sheetURL)
         const container = document.getElementById("cards");
 
         rows.forEach(row => {
-            const empName = row.c[0].v;
-            const empID = row.c[1].v;
-            const childName = row.c[2].v;
-            const childID = row.c[3].v;
+            const empName = row.c[1].v;
+            const empID = row.c[0].v;
+            const childName = row.c[3].v;
+            const childID = row.c[2].v;
 
             const card = document.createElement("div");
             card.className = "card";
