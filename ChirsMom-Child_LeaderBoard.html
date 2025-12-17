@@ -2,503 +2,210 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ChrisMax Cyberpunk Leaderboard</title>
+<title>🎄 Office Christmas Family Directory</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+<!-- Professional Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <!-- Icons -->
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  rel="stylesheet"
-/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-  /* ===== BASE ===== */
-  * {
+body {
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  html,
-  body {
-    height: 100%;
-    width: 100%;
+    background: radial-gradient(circle, #0b3d2e, #021b13);
     font-family: 'Poppins', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: #070b12;
     color: #fff;
-    position: relative;
-    overflow: hidden;
-  }
+    overflow-x: hidden;
+}
 
-  /* ===== CYBER GRID ===== */
-  .grid {
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(rgba(255, 42, 42, 0.25) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 42, 42, 0.25) 1px, transparent 1px);
-    background-size: 40px 40px;
-    transform-origin: center;
-    transform: perspective(800px) rotateX(60deg);
-    animation: gridMove 20s linear infinite;
-    opacity: 0.25;
-    z-index: 0;
-  }
-  @keyframes gridMove {
-    from {
-      background-position: 0 0, 0 0;
-    }
-    to {
-      background-position: 0 800px, 800px 0;
-    }
-  }
-
-  /* ===== PARTICLES ===== */
-  .particle {
-    position: fixed;
-    top: -10px;
-    pointer-events: none;
-    animation: fall linear infinite;
-    opacity: 0.8;
-    z-index: 1;
-    font-size: 14px;
-  }
-  @keyframes fall {
-    to {
-      transform: translateY(110vh);
-    }
-  }
-
-  /* ===== CONTAINER ===== */
-  .container {
-    max-width: 1050px;
-    margin: 40px auto 0 auto; /* no bottom margin */
-    padding: 25px;
-    position: relative;
-    z-index: 3;
-    border-radius: 28px;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 42, 42, 0.15),
-      rgba(0, 0, 0, 0.5)
-    );
-    box-shadow: 0 0 70px rgba(255, 42, 42, 0.6);
-    border: 1px solid rgba(255, 42, 42, 0.25);
-    height: calc(100vh - 80px);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* Background floating icons inside container */
-  .container::before {
-    content: "🎁🎄🎅❄";
-    position: absolute;
-    font-size: 36px;
-    color: rgba(255, 42, 42, 0.15);
-    top: 30px;
-    left: 30px;
-    opacity: 0.2;
-    animation: floatIconSlow 10s ease-in-out infinite alternate;
-    pointer-events: none;
-    user-select: none;
-    filter: drop-shadow(0 0 4px rgba(255, 42, 42, 0.3));
-  }
-
-  .container::after {
-    content: "❄🎅🎄🎁";
-    position: absolute;
-    font-size: 48px;
-    color: rgba(255, 42, 42, 0.1);
-    bottom: 40px;
-    right: 40px;
-    opacity: 0.15;
-    animation: floatIconSlow 14s ease-in-out infinite alternate-reverse;
-    pointer-events: none;
-    user-select: none;
-    filter: drop-shadow(0 0 6px rgba(255, 42, 42, 0.2));
-  }
-
-  @keyframes floatIconSlow {
-    0% {
-      transform: translateY(0) rotate(0deg);
-    }
-    100% {
-      transform: translateY(-10px) rotate(15deg);
-    }
-  }
-
-  /* ===== HEADER ===== */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 42, 42, 0.5);
-    z-index: 4;
-  }
-  .header .title {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-  }
-  .header .title i {
-    font-size: 38px;
-    color: #ff2a2a;
-    text-shadow: 0 0 30px rgba(255, 42, 42, 0.8);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    50% {
-      transform: scale(1.15);
-    }
-  }
-  .header .title h1 {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 28px;
-  }
-  .header .title span {
-    font-size: 12px;
-    opacity: 0.7;
+/* Header */
+header {
+    text-align: center;
+    padding: 35px 20px;
+    font-size: 2.6rem;
+    font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
-  }
+    animation: glow 2s infinite alternate;
+}
 
-  /* ===== REFRESH BUTTON ===== */
-  .refresh {
-    background: linear-gradient(135deg, #ff2a2a, #ff6a6a);
+@keyframes glow {
+    from { text-shadow: 0 0 8px #ff4d4d; }
+    to { text-shadow: 0 0 20px #00ffcc; }
+}
+
+/* Search */
+#searchInput {
+    width: 70%;
+    max-width: 500px;
+    padding: 14px 18px;
+    font-size: 1rem;
+    border-radius: 30px;
     border: none;
-    padding: 12px 25px;
-    border-radius: 40px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 30px rgba(255, 42, 42, 0.7);
-    transition: 0.3s;
-    z-index: 4;
-  }
-  .refresh:hover {
-    transform: scale(1.1);
-  }
-  .refresh.spin i {
-    animation: spin 1s linear infinite;
-  }
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  /* ===== TABLE CARD ===== */
-  .card {
-    background: linear-gradient(
-      135deg,
-      rgba(255, 42, 42, 0.08),
-      rgba(0, 0, 0, 0.4)
-    );
-    border-radius: 26px;
-    border: 1px solid rgba(255, 42, 42, 0.2);
-    box-shadow: 0 0 50px rgba(255, 42, 42, 0.3);
-    padding: 15px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* ===== TABLE ===== */
-  .table-container {
-  max-height: calc(100vh - 240px); /* adjust based on header height */
-  overflow-y: auto; /* scroll only tbody */
-  overflow-x: hidden; /* no horizontal scroll */
+    outline: none;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+/* Cards */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    padding: 40px;
 }
 
-thead, tbody {
-  display: block; /* allow separate scroll for tbody */
-}
-
-thead tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-tbody {
-  display: block;
-  max-height: 400px; /* set visible height for rows, table scrolls here */
-  width: 100%;
-}
-
-tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-th, td {
-  padding: 12px 20px;
-  text-align: left;
-}
-
-thead th {
-  background: rgba(255, 0, 0, 0.5); /* header background */
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-/* Scrollbar styling for tbody */
-tbody::-webkit-scrollbar {
-  width: 10px;
-}
-
-tbody::-webkit-scrollbar-track {
-  background: rgba(255, 42, 42, 0.05);
-  border-radius: 5px;
-}
-
-tbody::-webkit-scrollbar-thumb {
-  background: rgba(255, 42, 42, 0.4);
-  border-radius: 5px;
-}
-
-tbody::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 42, 42, 0.7);
-}
-
-  table {
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: separate;
-    border-spacing: 0 12px;
-  }
-  th {
-    font-size: 14px;
-    opacity: 0.7;
-    text-align: left;
-    padding: 10px 20px;
-    position: sticky;
-    top: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 2;
-  }
-  td {
-    padding: 14px 20px;
-    font-size: 15px;
-  }
-
-  /* ===== ROWS ===== */
-  .row {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    transition: 0.35s;
+.card {
+    background: linear-gradient(145deg, #b30000, #ff3333);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    transform: scale(0.95);
+    animation: pop 0.8s forwards;
     position: relative;
-    margin-bottom: 20px;
-  }
-  .row:hover {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow: 0 0 25px rgba(255, 42, 42, 0.5);
-  }
+}
 
-  /* ===== FIRST PLACE ===== */
-  .first {
-    background: linear-gradient(135deg, rgba(255, 42, 42, 0.5), rgba(255, 255, 255, 0.08));
-    box-shadow: 0 0 60px rgba(255, 42, 42, 1);
-  }
-  .first::after {
-    content: "🎁";
+@keyframes pop {
+    to { transform: scale(1); }
+}
+
+.card::before {
+    content: "🎄";
+    font-size: 2.5rem;
     position: absolute;
+    top: -18px;
+    right: 18px;
+    animation: spin 6s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.info {
+    font-size: 1rem;
+    margin: 6px 0;
+}
+
+.child {
+    background: rgba(255,255,255,0.15);
+    padding: 14px;
+    border-radius: 14px;
+    margin-top: 14px;
+    font-size: 0.95rem;
+}
+
+/* Snow */
+.snow {
+    position: fixed;
     top: -10px;
-    right: -10px;
-    font-size: 28px;
-    animation: float 2s infinite;
-  }
-  @keyframes float {
-    50% {
-      transform: translateY(-6px);
-    }
-  }
+    color: white;
+    pointer-events: none;
+    animation: snow 10s linear infinite;
+}
 
-  /* ===== RANK ===== */
-  .rank {
-    font-weight: 800;
-    font-size: 18px;
-  }
-  .rank i {
-    margin-right: 6px;
-    color: #ff2a2a;
-  }
-
-  /* ===== POINTS ===== */
-  .points {
-    font-weight: 700;
-    color: #ff4d4d;
-    text-shadow: 0 0 10px rgba(255, 42, 42, 0.6);
-  }
-
-  /* ===== FESTIVE ICONS ===== */
-  .festive-icon {
-    margin-left: 6px;
-    animation: icon-bounce 2s infinite alternate;
-  }
-  @keyframes icon-bounce {
-    50% {
-      transform: translateY(-4px);
-    }
-  }
-
-  /* Scrollbar Styling */
-  .table-container::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  .table-container::-webkit-scrollbar-track {
-    background: rgba(255, 42, 42, 0.05);
-    border-radius: 5px;
-  }
-
-  .table-container::-webkit-scrollbar-thumb {
-    background: rgba(255, 42, 42, 0.4);
-    border-radius: 5px;
-  }
-
-  .table-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 42, 42, 0.7);
-  }
+@keyframes snow {
+    to { transform: translateY(110vh); }
+}
 </style>
 </head>
+
 <body>
-  <!-- Cyber Grid -->
-  <div class="grid"></div>
 
-  <!-- PARTICLES -->
-  <script>
-    const icons = ["❄", "🎁", "🎄", "🎅"];
-    for (let i = 0; i < 80; i++) {
-      const p = document.createElement("div");
-      p.className = "particle";
-      p.textContent = icons[Math.floor(Math.random() * icons.length)];
-      p.style.left = Math.random() * 100 + "vw";
-      p.style.fontSize = 12 + Math.random() * 20 + "px";
-      p.style.animationDuration = 5 + Math.random() * 12 + "s";
-      p.style.opacity = Math.random();
-      document.body.appendChild(p);
-    }
-  </script>
+<header>
+    🎅 Office Christmas Family 🎁
+</header>
 
-  <div class="container">
-    <div class="card">
-      <div class="header">
-        <div class="title">
-          <i class="fas fa-gift"></i>
-          <div>
-            <h1>
-              Leaderboard <span class="festive-icon">🎄</span>
-            </h1>
-            <span>Chris Mom & Child Leaderboard</span>
-          </div>
-        </div>
-        <button id="refreshBtn" class="refresh" onclick="loadData()">
-          <i class="fas fa-rotate"></i> Refresh
-        </button>
-      </div>
+<!-- Search Bar -->
+<div style="text-align:center; margin-bottom: 10px;">
+    <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search by Employee / Child Name or Office ID"
+    >
+</div>
 
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th><i class="fas fa-user"></i> Player</th>
-              <th><i class="fas fa-star"></i> Points</th>
-            </tr>
-          </thead>
-          <tbody id="board"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+<!-- Cards -->
+<div class="container" id="cards"></div>
 
-  <script>
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/1s1XHXFJe0_o2fp7ysxb0AFcoqmkna2C8rO_kcuyeolQ/gviz/tq?tqx=out:csv";
-
-    async function loadData() {
-  const btn = document.getElementById("refreshBtn");
-  btn.classList.add("spin");
-
-  const tbody = document.getElementById("board");
-  tbody.innerHTML = "";
-
-  try {
-    const res = await fetch(SHEET_URL);
-    const txt = await res.text();
-
-    console.log("Raw CSV data:", txt);
-
-    const rows = txt.trim().split("\n").map(row => {
-      return row.split(",").map(cell => cell.trim());
-    });
-
-    console.log("Parsed rows:", rows);
-
-    rows.shift(); // Remove header row
-
-    const data = rows.map(r => {
-      let name = r[0] || "";
-      let pointsRaw = r[1] || "0";
-
-      name = name.replace(/^"|"$/g, ""); // Remove quotes
-      let points = Number(pointsRaw.replace(/[^0-9.-]+/g, "")); // Clean & convert
-
-      if (isNaN(points)) points = 0;
-
-      return { name, points };
-    });
-
-    console.log("Final data:", data);
-
-    data.sort((a, b) => b.points - a.points);
-
-    const topPoints = data.length > 0 ? data[0].points : 0;
-
-    data.forEach((p, i) => {
-      const isFirst = p.points === topPoints && topPoints > 0;
-      const tr = document.createElement("tr");
-      tr.className = "row";
-      tr.innerHTML = `
-        <td class="rank">${isFirst ? '<i class="fas fa-crown"></i>#1' : "#" + (i + 1)}</td>
-        <td>${p.name} ${isFirst ? '<span class="festive-icon">🎅</span>' : ""}</td>
-        <td class="points">${p.points}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    if (data.length === 0) {
-      tbody.innerHTML = "<tr><td colspan='3'>No data available</td></tr>";
-    }
-  } catch (e) {
-    tbody.innerHTML = "<tr><td colspan='3'>Failed to load data</td></tr>";
-    console.error(e);
-  }
-
-  btn.classList.remove("spin");
+<script>
+// ❄️ Snow Effect
+for (let i = 0; i < 50; i++) {
+    const snow = document.createElement("div");
+    snow.className = "snow";
+    snow.innerHTML = "❄";
+    snow.style.left = Math.random() * 100 + "vw";
+    snow.style.animationDuration = (Math.random() * 5 + 5) + "s";
+    document.body.appendChild(snow);
 }
 
-    loadData();
-  </script>
+// 🔗 Google Sheet
+const sheetID = "PASTE_YOUR_SHEET_ID_HERE";
+const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
+
+fetch(sheetURL)
+    .then(res => res.text())
+    .then(data => {
+        const json = JSON.parse(data.substring(47).slice(0, -2));
+        const rows = json.table.rows;
+        const container = document.getElementById("cards");
+
+        rows.forEach(row => {
+            const empName = row.c[0].v;
+            const empID = row.c[1].v;
+            const childName = row.c[2].v;
+            const childID = row.c[3].v;
+
+            const card = document.createElement("div");
+            card.className = "card";
+
+            // Search data
+            card.setAttribute(
+                "data-search",
+                `${empName} ${empID} ${childName} ${childID}`.toLowerCase()
+            );
+
+            card.innerHTML = `
+                <div class="title">
+                    <i class="fas fa-user-tie"></i> ${empName}
+                </div>
+                <div class="info">
+                    🏢 Office ID: <strong>${empID}</strong>
+                </div>
+
+                <div class="child">
+                    <div class="info">
+                        <i class="fas fa-child"></i>
+                        Child: <strong>${childName}</strong>
+                    </div>
+                    <div class="info">
+                        🎫 Child Office ID: <strong>${childID}</strong>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+    });
+
+// 🔍 Search Logic
+document.getElementById("searchInput").addEventListener("keyup", function () {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.display = card.dataset.search.includes(query)
+            ? "block"
+            : "none";
+    });
+});
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
-
