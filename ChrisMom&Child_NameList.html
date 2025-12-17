@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>🎄 Christmas Office Family Directory</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body {
+    margin: 0;
+    background: radial-gradient(circle, #0b3d2e, #021b13);
+    font-family: 'Mountains of Christmas', cursive;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+header {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 3rem;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #ff0000; }
+    to { text-shadow: 0 0 25px #00ffcc; }
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    padding: 40px;
+}
+
+.card {
+    background: linear-gradient(145deg, #b30000, #ff3333);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    transform: scale(0.95);
+    animation: pop 1s forwards;
+    position: relative;
+}
+
+@keyframes pop {
+    to { transform: scale(1); }
+}
+
+.card::before {
+    content: "🎄";
+    font-size: 3rem;
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    animation: spin 6s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.info {
+    font-size: 1.2rem;
+    margin: 8px 0;
+}
+
+.child {
+    background: rgba(255,255,255,0.15);
+    padding: 15px;
+    border-radius: 15px;
+    margin-top: 15px;
+}
+
+.snow {
+    position: fixed;
+    top: -10px;
+    color: white;
+    animation: snow 10s linear infinite;
+}
+
+@keyframes snow {
+    to {
+        transform: translateY(110vh);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    🎅 Office Christmas Family 🎁
+</header>
+
+<div class="container" id="cards"></div>
+
+<script>
+// ❄️ Snow Effect
+for (let i = 0; i < 50; i++) {
+    let snow = document.createElement("div");
+    snow.className = "snow";
+    snow.innerHTML = "❄";
+    snow.style.left = Math.random() * 100 + "vw";
+    snow.style.animationDuration = (Math.random() * 5 + 5) + "s";
+    document.body.appendChild(snow);
+}
+
+// 🔗 Google Sheet JSON
+const sheetID = "1qls6hzsVn0zb4vzH2FWl_XLP1YJ3OqtSR9a3MNRrxjI";
+const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
+
+fetch(sheetURL)
+    .then(res => res.text())
+    .then(data => {
+        const json = JSON.parse(data.substring(47).slice(0, -2));
+        const rows = json.table.rows;
+        const container = document.getElementById("cards");
+
+        rows.forEach(row => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            card.innerHTML = `
+                <div class="title">
+                    <i class="fas fa-user-tie"></i>
+                    ${row.c[0].v}
+                </div>
+                <div class="info">
+                    🏢 Office ID: <strong>${row.c[1].v}</strong>
+                </div>
+
+                <div class="child">
+                    <div class="info">
+                        <i class="fas fa-child"></i>
+                        Child: <strong>${row.c[2].v}</strong>
+                    </div>
+                    <div class="info">
+                        🎫 Child Office ID: <strong>${row.c[3].v}</strong>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+    });
+</script>
+
+</body>
+</html>
